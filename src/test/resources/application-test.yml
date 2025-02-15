@@ -1,0 +1,32 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  application:
+    name: auth-service
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        default_batch_fetch_size: 100
+    show-sql: true
+    defer-datasource-initialization: true
+
+service:
+  jwt:
+    access-expiration: 3600000
+    secret-key: "testkey"
+
+sql:
+  init:
+    mode: never
