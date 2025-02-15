@@ -1,9 +1,11 @@
 package com.griotold.backend_onboarding.application.service;
 
+import com.griotold.backend_onboarding.application.dto.UserSignin;
 import com.griotold.backend_onboarding.application.dto.UserSignup;
 import com.griotold.backend_onboarding.application.dto.UserSignupResponse;
 import com.griotold.backend_onboarding.application.exception.AuthException;
 import com.griotold.backend_onboarding.application.exception.ErrorCode;
+import com.griotold.backend_onboarding.application.interfaces.TokenProvider;
 import com.griotold.backend_onboarding.domain.User;
 import com.griotold.backend_onboarding.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     @Transactional
     public UserSignupResponse signup(UserSignup signup) {
@@ -38,6 +41,22 @@ public class AuthService {
     private void validateDuplicateUsername(String username) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new AuthException(ErrorCode.DUPLICATE_USERNAME);
+        }
+    }
+
+    public String signin(UserSignin signin) {
+        log.info("signin.UserSignin: {}", signin);
+        User user = userRepository.findByUsername(signin.username())
+                .orElseThrow(() -> new AuthException(ErrorCode.USER_NOT_FOUND));
+
+        validatePassword(signin.password(), user.getPassword());
+
+        return tokenProvider.createAccessToken(user.getId(), user.getRole());
+    }
+
+    private void validatePassword(String rawPassword, String encodedPassword) {
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+            throw new AuthException(ErrorCode.INVALID_PASSWORD);
         }
     }
 }

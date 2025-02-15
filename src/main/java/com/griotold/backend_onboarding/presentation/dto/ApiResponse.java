@@ -1,8 +1,8 @@
-package com.griotold.backend_onboarding.presentation;
+package com.griotold.backend_onboarding.presentation.dto;
 
 public record ApiResponse<T>(
         String message,
-        T date
+        T data
 ) {
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>("API 요청에 성공했습니다", data);

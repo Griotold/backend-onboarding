@@ -26,4 +26,4 @@ spring:
 service:
   jwt:
     secret-key: ${SECRET_KEY}
-    access-expiration: 3600000 #1시간
+    access-expiration: 3600000 # 1시간

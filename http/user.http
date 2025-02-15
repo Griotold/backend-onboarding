@@ -7,3 +7,12 @@ Content-Type: application/json
   "password": "Pass1234!",
   "nickname": "mentos"
 }
+
+### 로그인
+POST localhost:8080/signin
+Content-Type: application/json
+
+{
+  "username": "jinho",
+  "password": "Pass1234!"
+}
