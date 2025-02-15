@@ -5,6 +5,9 @@ import com.griotold.backend_onboarding.application.service.AuthService;
 import com.griotold.backend_onboarding.infra.config.security.AuthConfig;
 import com.griotold.backend_onboarding.infra.config.security.CustomAccessDeniedHandler;
 import com.griotold.backend_onboarding.infra.config.security.CustomAuthenticationEntryPoint;
+import com.griotold.backend_onboarding.presentation.controller.AuthController;
+import com.griotold.backend_onboarding.presentation.dto.UserSigninRequest;
+import com.griotold.backend_onboarding.presentation.dto.UserSignupRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -204,5 +207,54 @@ class AuthControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @DisplayName("signin - 성공")
+    @Test
+    void signin_success() throws Exception {
+        // given
+        String username = "testuser";
+        String password = "Pass1234!";
+        UserSigninRequest userSigninRequest = new UserSigninRequest(username, password);
+
+        // when & then
+        mockMvc.perform(post("/signin")
+                        .content(objectMapper.writeValueAsString(userSigninRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("signin - username이 없을 때")
+    @Test
+    void signin_whenUsernameIsNull() throws Exception {
+        // given
+        String username = null;
+        String password = "Pass1234!";
+        UserSigninRequest userSigninRequest = new UserSigninRequest(username, password);
+
+        // when & then
+        mockMvc.perform(post("/signin")
+                        .content(objectMapper.writeValueAsString(userSigninRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("signin - password가 없을 때")
+    @Test
+    void signin_whenPasswordIsNull() throws Exception {
+        // given
+        String username = "testuser";
+        String password = null;
+        UserSigninRequest userSigninRequest = new UserSigninRequest(username, password);
+
+        // when & then
+        mockMvc.perform(post("/signin")
+                        .content(objectMapper.writeValueAsString(userSigninRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
 
 }

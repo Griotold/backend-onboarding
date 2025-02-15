@@ -33,6 +33,7 @@ public class AuthConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeRequests(authorize -> authorize
                                 .requestMatchers("/signup").permitAll()
+                                .requestMatchers("/signin").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -43,7 +44,6 @@ public class AuthConfig {
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler));
 
-        // 설정된 보안 필터 체인을 반환합니다.
         return http.build();
     }
 }

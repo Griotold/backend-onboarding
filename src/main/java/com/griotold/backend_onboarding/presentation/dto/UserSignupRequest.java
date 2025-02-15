@@ -1,4 +1,4 @@
-package com.griotold.backend_onboarding.presentation;
+package com.griotold.backend_onboarding.presentation.dto;
 
 import com.griotold.backend_onboarding.application.dto.UserSignup;
 import jakarta.validation.constraints.NotBlank;
